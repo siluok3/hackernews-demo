@@ -15,7 +15,7 @@ function getUserId(context) {
 
         return userId;
     }
-    throw new Error('eeeerroooorrrr');
+    throw new Error('You are not authorized mate!');
 }
 
 module.exports = {
