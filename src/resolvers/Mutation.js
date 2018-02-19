@@ -23,7 +23,24 @@ async function signup(parent, args, context, info) {
     }
 }
 
+async function login(parent, args, context, info) {
+    const user = await context.db.query.user( { where: { email: args.email} });
+    if (!user) {
+        throw new Error(`This email doesn't exist you dumbass: ${args.email}`);
+    }
+
+    const valid = await bcrypt.compare(args.password, user.password);
+    if(!valid) {
+        throw new Error('Invalid Password');
+    }
+
+    const token = jwt.sign( { userId: user.id }, APP_SECRET);
+
+    return { token, user };
+}
+
 module.exports = {
     post,
-    signup
+    signup,
+    login
 };
